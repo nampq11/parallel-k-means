@@ -53,7 +53,13 @@ void Sequential::run() {
     double time_point1 = omp_get_wtime();
 
     printf("Creating points..\n");
-    vector<Point> points = init_point(num_point);
+    vector<Point> points = init_point(num_point, num_cluster, max_range);
+    try {
+        printf("Drawing chart..\n");
+        Sequential::draw_chart_gnu(points);
+    } catch (int e) {
+        printf("Chart \n");
+    }
     printf("Points initialized..\n"); 
 
     printf("Creating clusters..\n");
@@ -74,7 +80,6 @@ void Sequential::run() {
         iterations++;
      
         compute_distance(points, clusters);
-
         conv = Sequential::update_clusters(clusters);
         printf("Iteration %d done \n", iterations);
     }   

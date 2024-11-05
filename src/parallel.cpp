@@ -63,6 +63,7 @@ void Parallel::run() {
     vector<Point> points;
     vector<Cluster> clusters;
 
+    omp_set_num_threads(12);
     #pragma omp parallel
     {
         #pragma omp sections
@@ -70,8 +71,15 @@ void Parallel::run() {
             #pragma omp section
             {
                 printf("Creating points..\n");
-                points = init_point(num_point);
+                points = init_point(num_point, num_cluster, max_range);
                 printf("Points created..\n");
+
+                try {
+                    printf("Drawing chart..\n");
+                    Parallel::draw_chart_gnu(points);
+                } catch (int e) {
+                    printf("Chart not available, gnuplot not found\n");
+                }
             }
             #pragma omp section
             {

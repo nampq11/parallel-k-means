@@ -21,7 +21,7 @@ class Kmeans {
             this->max_iterations = max_iterations;
         }
 
-        std::vector<Point> init_point(int num_point);
+        std::vector<Point> init_point(int num_point, int cluster, int max_range);
         std::vector<Cluster> init_cluster(int num_cluster);
         double euclidean_distance(Point point, Cluster cluster);
         bool update_clusters(std::vector<Cluster> &clusters);

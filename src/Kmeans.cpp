@@ -4,6 +4,7 @@
 #include<stdio.h>
 #include<omp.h>
 #include<chrono>
+#include<random>
 
 #include "Point.h"
 #include "Cluster.h"
@@ -11,12 +12,28 @@
 
 using namespace std;
 
-vector<Point> Kmeans::init_point(int num_point) {
+vector<Point> Kmeans::init_point(int num_point, int num_cluster, int ) {
     vector<Point> points(num_point);
     Point *ptr = &points[0];
-    for (int i = 0; i < num_point; i++)
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    std::normal_distribution<double> dist(-max_range / 10.0, max_range / 10.0);
+
+    vector<Point> cluster_centers(num_cluster);
+    for (int i = 0; i < num_cluster; i++)
     {
-        Point* point = new Point(rand() % (int)max_range, rand() % (int)max_range);
+        cluster_centers[i] = Point(rand() % max_range, rand() % max_range);
+    }
+    
+
+    for (int i = 0; i < num_point; i++)
+    {    
+        int cluster_idx = i % num_cluster;
+        double x = cluster_centers[cluster_idx].getX() + dist(gen);
+        double y = cluster_centers[cluster_idx].getY() + dist(gen);
+        Point* point = new Point(x, y);
         ptr[i] = *point;
     }
 
